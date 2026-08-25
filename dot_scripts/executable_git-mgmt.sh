@@ -23,9 +23,15 @@ setup_status() {
     local repo="$1"
     local missing=()
     local hook_path
+    local current_name current_email
 
-    git -C "$repo" config --local --get user.name >/dev/null 2>&1 || missing+=("user.name")
-    git -C "$repo" config --local --get user.email >/dev/null 2>&1 || missing+=("user.email")
+    current_name="$(git -C "$repo" config --local --get user.name 2>/dev/null || true)"
+    current_email="$(git -C "$repo" config --local --get user.email 2>/dev/null || true)"
+    [[ -n "$current_name" ]] || missing+=("user.name")
+    [[ -n "$current_email" ]] || missing+=("user.email")
+    if [[ "${current_name,,}" == *fuog* || "${current_email,,}" == *fuog* ]]; then
+        missing+=("stale-fuog-identity")
+    fi
 
     if [[ -f "$repo/.pre-commit-config.yaml" ]]; then
         hook_path="$(git -C "$repo" rev-parse --git-path hooks/pre-commit)"
