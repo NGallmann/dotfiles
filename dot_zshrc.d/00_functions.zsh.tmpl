@@ -65,14 +65,14 @@ function git_setup() {
     if [[ "${current_name:l}" == *fuog* || "${current_email:l}" == *fuog* ]]; then
         echo "Stale fuog identity in local git config, rewriting"
     fi
-    if [[ "$origin_url" == *"{{ (rbwFields "--field" "id" "8ddb8301-a24b-4916-a12c-b3048702219c").hostname.value }}"* ]]; then
-        echo "Configure {{ (rbwFields "--field" "id" "8ddb8301-a24b-4916-a12c-b3048702219c").hostname.value }} Repo!"
-        git config user.name "{{ (rbwFields "--field" "id" "037c5927-0473-4020-9e47-dcfd3d04228a").displayName.value }}"
-        git config user.email "{{ (rbw "--field" "id" "037c5927-0473-4020-9e47-dcfd3d04228a").data.username }}"
-    elif [[ "$origin_url" == *"{{ (rbwFields "--field" "id" "cd30813d-40d9-45a4-a2a9-f5f9de3ce273").hostname.value }}"* ]]; then
-        echo "Configure {{ (rbwFields "--field" "id" "cd30813d-40d9-45a4-a2a9-f5f9de3ce273").hostname.value }} Repo!"
+    if [[ "$origin_url" == *"{{ (rbwFields "--field" "id" "c1058b40-cd58-4905-a13d-14cfdc04a0aa").hostname.value }}"* ]]; then
+        echo "Configure {{ (rbwFields "--field" "id" "c1058b40-cd58-4905-a13d-14cfdc04a0aa").hostname.value }} Repo!"
+        git config user.name "{{ (rbwFields "--field" "id" "210e7538-1e7d-4ef9-9030-07c826b09a7e").displayName.value }}"
+        git config user.email "{{ (rbw "--field" "id" "210e7538-1e7d-4ef9-9030-07c826b09a7e").data.username }}"
+    elif [[ "$origin_url" == *"{{ (rbwFields "--field" "id" "2c16f6c8-f5af-4154-883b-0d8df7cf7444").hostname.value }}"* ]]; then
+        echo "Configure {{ (rbwFields "--field" "id" "2c16f6c8-f5af-4154-883b-0d8df7cf7444").hostname.value }} Repo!"
         git config user.name "Nathanael Gallmann"
-        git config user.email "{{ (rbwFields "--field" "id" "cbbcfef2-6483-4ff3-9df6-ec5d8030d483").email.value }}"
+        git config user.email "{{ (rbwFields "--field" "id" "9d7cec48-212b-4039-bd22-cce2ba85aa33").email.value }}"
     elif [[ "$origin_url" == *"github.com"* ]]; then
         echo "Configure github.com Repo!"
         git config user.name "Nathanael Gallmann"

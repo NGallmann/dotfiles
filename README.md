@@ -24,7 +24,7 @@ Install the minimum tooling first:
 Then initialize:
 
 ```bash
-chezmoi init --apply fuog/dotfiles
+chezmoi init --apply NGallmann/dotfiles
 ```
 
 ## Encryption
