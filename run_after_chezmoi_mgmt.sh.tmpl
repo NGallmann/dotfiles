@@ -45,12 +45,6 @@ fi
 test -f "{{ .chezmoi.config.destDir }}/.DevOpsTools/skills-repos.conf" && \
     ln -sf "{{ .chezmoi.config.destDir }}/.DevOpsTools/skills-repos.conf" "{{ .chezmoi.config.workingTree }}/dot_DevOpsTools/encrypted_skills-repos_decrypted.conf"
 
-test -f "{{ .chezmoi.config.destDir }}/.codex-private/config.toml" && \
-    ln -sf "{{ .chezmoi.config.destDir }}/.codex-private/config.toml" "{{ .chezmoi.config.workingTree }}/dot_codex-private/encrypted_private_config_decrypted.toml"
-
-test -f "{{ .chezmoi.config.destDir }}/.codex-private/AGENTS.md" && \
-    ln -sf "{{ .chezmoi.config.destDir }}/.codex-private/AGENTS.md" "{{ .chezmoi.config.workingTree }}/dot_codex-private/encrypted_AGENTS_decrypted.md"
-
 test -f "{{ .chezmoi.config.destDir }}/.ssh/vault/work-signed-cert.pub" && \
     ln -sf "{{ .chezmoi.config.destDir }}/.ssh/vault/work-signed-cert.pub" "{{ .chezmoi.config.workingTree }}/private_dot_ssh/private_vault/encrypted_private_work-signed-cert_decrypted.pub"
 

@@ -86,11 +86,6 @@ function git_setup() {
                 pre-commit install
 }
 
-function codex-private() {
-    mkdir -p $HOME/.codex-private
-    CODEX_HOME="$HOME/.codex-private" command codex "$@"
-}
-
 # This function just helps finding the right command, or executing it
 function rbw_find_entry() {
     rbw unlock >&2 || return 1
