@@ -11,6 +11,9 @@ test -f "{{ .chezmoi.config.destDir }}/.zshrc.d/05_work.zsh" && \
 test -f "{{ .chezmoi.config.destDir }}/.zshrc.d/06_private.zsh" && \
     ln -sf "{{ .chezmoi.config.destDir }}/.zshrc.d/06_private.zsh" "{{ .chezmoi.config.workingTree }}/dot_zshrc.d/encrypted_06_private_decrypted.zsh"
 
+test -f "{{ .chezmoi.config.destDir }}/.zshrc.d/12_git-mgmt_completion.zsh" && \
+    ln -sf "{{ .chezmoi.config.destDir }}/.zshrc.d/12_git-mgmt_completion.zsh" "{{ .chezmoi.config.workingTree }}/dot_zshrc.d/encrypted_12_git-mgmt_completion_decrypted.zsh"
+
 test -f "{{ .chezmoi.config.destDir }}/.ssh/config.d/private-config" && \
     ln -sf "{{ .chezmoi.config.destDir }}/.ssh/config.d/private-config" "{{ .chezmoi.config.workingTree }}/private_dot_ssh/config.d/encrypted_private-config_decrypted"
 

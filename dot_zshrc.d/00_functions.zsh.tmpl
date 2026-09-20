@@ -52,6 +52,18 @@ function update_bin_completion() {
     fi
 }
 
+# git-mgmt is a script; wrap `cd` so the interactive shell actually changes directory.
+function git-mgmt() {
+    if [[ "${1:-}" == cd ]]; then
+        shift
+        local dest
+        dest="$(command git-mgmt cd "$@")" || return
+        builtin cd -- "$dest"
+    else
+        command git-mgmt "$@"
+    fi
+}
+
 function git_setup() {
     if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1 ; then
         echo "You're nor in a git repo!" && return 1
@@ -71,7 +83,7 @@ function git_setup() {
         git config user.email "{{ (rbw "--field" "id" "210e7538-1e7d-4ef9-9030-07c826b09a7e").data.username }}"
     elif [[ "$origin_url" == *"{{ (rbwFields "--field" "id" "2c16f6c8-f5af-4154-883b-0d8df7cf7444").hostname.value }}"* ]]; then
         echo "Configure {{ (rbwFields "--field" "id" "2c16f6c8-f5af-4154-883b-0d8df7cf7444").hostname.value }} Repo!"
-        git config user.name "Nathanael Gallmann"
+        git config user.name "{{ (rbwFields "--field" "id" "9d7cec48-212b-4039-bd22-cce2ba85aa33").DisplayName.value }}"
         git config user.email "{{ (rbwFields "--field" "id" "9d7cec48-212b-4039-bd22-cce2ba85aa33").email.value }}"
     elif [[ "$origin_url" == *"github.com"* ]]; then
         echo "Configure github.com Repo!"
