@@ -20,6 +20,7 @@
       - jq
       - xclip
       - tcpdump
+      - ripgrep
 
 - name: Execute geerlingguy's Mac installer
   when: mac
@@ -108,6 +109,86 @@
 
   apt:
     name: "{{ common_packages + apt_specific_packages }}"
+
+- name: Install latest Pi and Herdr into ~/.local/bin
+  vars:
+    user_bin: "{{ ansible_facts['env']['HOME'] }}/.local/bin"
+    pi_asset_name: "{{ 'pi-linux-x64.tar.gz' if linux else 'pi-darwin-arm64.tar.gz' }}"
+    herdr_asset_name: "{{ 'herdr-linux-x86_64' if linux else 'herdr-macos-aarch64' }}"
+  block:
+    - name: Ensure ~/.local/bin exists
+      file:
+        path: "{{ user_bin }}"
+        state: directory
+        mode: "0755"
+
+    - name: Read latest GitHub releases
+      uri:
+        url: "https://api.github.com/repos/{{ item }}/releases/latest"
+        headers:
+          Accept: application/vnd.github+json
+      loop:
+        - earendil-works/pi
+        - herdrdev/herdr
+      register: github_latest
+
+    - name: Select GitHub releases for this machine
+      set_fact:
+        pi_release: >-
+          {{ github_latest.results
+             | selectattr('item', 'equalto', 'earendil-works/pi')
+             | map(attribute='json')
+             | first }}
+        herdr_release: >-
+          {{ github_latest.results
+             | selectattr('item', 'equalto', 'herdrdev/herdr')
+             | map(attribute='json')
+             | first }}
+
+    - name: Select release assets for this machine
+      set_fact:
+        pi_asset: >-
+          {{ pi_release.assets
+             | selectattr('name', 'equalto', pi_asset_name)
+             | first }}
+        herdr_asset: >-
+          {{ herdr_release.assets
+             | selectattr('name', 'equalto', herdr_asset_name)
+             | first }}
+
+    - name: Require release checksums
+      assert:
+        that:
+          - pi_asset.digest is match('^sha256:[0-9a-f]{64}$')
+          - herdr_asset.digest is match('^sha256:[0-9a-f]{64}$')
+        fail_msg: GitHub release asset is missing a sha256 digest
+
+    - name: Install Herdr
+      get_url:
+        url: "{{ herdr_asset.browser_download_url }}"
+        dest: "{{ user_bin }}/herdr"
+        mode: "0755"
+        checksum: "{{ herdr_asset.digest }}"
+
+    - name: Download Pi archive
+      get_url:
+        url: "{{ pi_asset.browser_download_url }}"
+        dest: "/tmp/{{ pi_asset_name }}"
+        mode: "0644"
+        checksum: "{{ pi_asset.digest }}"
+
+    - name: Unpack Pi archive
+      unarchive:
+        src: "/tmp/{{ pi_asset_name }}"
+        dest: /tmp
+        remote_src: true
+
+    - name: Install Pi binary
+      copy:
+        src: /tmp/pi/pi
+        dest: "{{ user_bin }}/pi"
+        remote_src: true
+        mode: "0755"
 
 # - name: Install Snap packages
 #   snap:
