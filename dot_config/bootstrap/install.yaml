@@ -177,18 +177,24 @@
         mode: "0644"
         checksum: "{{ pi_asset.digest }}"
 
-    - name: Unpack Pi archive
+    - name: Ensure Pi install directory exists
+      file:
+        path: "{{ ansible_facts['env']['HOME'] }}/.local/lib"
+        state: directory
+        mode: "0755"
+
+    - name: Unpack Pi archive next to its theme files
       unarchive:
         src: "/tmp/{{ pi_asset_name }}"
-        dest: /tmp
+        dest: "{{ ansible_facts['env']['HOME'] }}/.local/lib"
         remote_src: true
 
-    - name: Install Pi binary
-      copy:
-        src: /tmp/pi/pi
+    - name: Link Pi binary
+      file:
+        src: "{{ ansible_facts['env']['HOME'] }}/.local/lib/pi/pi"
         dest: "{{ user_bin }}/pi"
-        remote_src: true
-        mode: "0755"
+        state: link
+        force: true
 
 # - name: Install Snap packages
 #   snap:
