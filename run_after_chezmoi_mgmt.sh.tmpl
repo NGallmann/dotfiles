@@ -57,6 +57,36 @@ test -f "{{ .chezmoi.config.destDir }}/.config/gcx/config.yaml" && \
 test -f "{{ .chezmoi.config.destDir }}/.mikromcp/routers.yaml" && \
     ln -sf "{{ .chezmoi.config.destDir }}/.mikromcp/routers.yaml" "{{ .chezmoi.config.workingTree }}/dot_mikromcp/encrypted_routers_decrypted.yaml"
 
+test -f "{{ .chezmoi.config.destDir }}/.pi/agent/settings.json" && \
+    ln -sf "{{ .chezmoi.config.destDir }}/.pi/agent/settings.json" "{{ .chezmoi.config.workingTree }}/dot_pi/agent/encrypted_settings_decrypted.json"
+
+test -f "{{ .chezmoi.config.destDir }}/.pi/agent/models.json" && \
+    ln -sf "{{ .chezmoi.config.destDir }}/.pi/agent/models.json" "{{ .chezmoi.config.workingTree }}/dot_pi/agent/encrypted_private_models_decrypted.json"
+
+test -f "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/bash-secret-env.ts" && \
+    ln -sf "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/bash-secret-env.ts" "{{ .chezmoi.config.workingTree }}/dot_pi/agent/extensions/encrypted_bash-secret-env_decrypted.ts"
+
+test -f "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/subagent-model-guard.ts" && \
+    ln -sf "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/subagent-model-guard.ts" "{{ .chezmoi.config.workingTree }}/dot_pi/agent/extensions/encrypted_subagent-model-guard_decrypted.ts"
+
+test -f "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/sandbox-bash-failures/index.ts" && \
+    ln -sf "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/sandbox-bash-failures/index.ts" "{{ .chezmoi.config.workingTree }}/dot_pi/agent/extensions/sandbox-bash-failures/encrypted_index_decrypted.ts"
+
+test -f "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/sandbox-bash-failures/context.md" && \
+    ln -sf "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/sandbox-bash-failures/context.md" "{{ .chezmoi.config.workingTree }}/dot_pi/agent/extensions/sandbox-bash-failures/encrypted_context_decrypted.md"
+
+test -f "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/pi-sandbox/config.json" && \
+    ln -sf "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/pi-sandbox/config.json" "{{ .chezmoi.config.workingTree }}/dot_pi/agent/extensions/pi-sandbox/encrypted_config_decrypted.json"
+
+test -f "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/pi-sandbox/config.notes.md" && \
+    ln -sf "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/pi-sandbox/config.notes.md" "{{ .chezmoi.config.workingTree }}/dot_pi/agent/extensions/pi-sandbox/encrypted_config.notes_decrypted.md"
+
+test -f "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/pi-permission-system/config.json" && \
+    ln -sf "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/pi-permission-system/config.json" "{{ .chezmoi.config.workingTree }}/dot_pi/agent/extensions/pi-permission-system/encrypted_config_decrypted.json"
+
+test -f "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/pi-auto-review/config.json" && \
+    ln -sf "{{ .chezmoi.config.destDir }}/.pi/agent/extensions/pi-auto-review/config.json" "{{ .chezmoi.config.workingTree }}/dot_pi/agent/extensions/private_pi-auto-review/encrypted_config_decrypted.json"
+
 # Linking as command
 test -d "{{ .chezmoi.config.destDir }}/.local/bin" || \
     mkdir -p "{{ .chezmoi.config.destDir }}/.local/bin"
