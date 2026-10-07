@@ -113,7 +113,6 @@
 - name: Install latest Pi and Herdr into ~/.local/bin
   vars:
     user_bin: "{{ ansible_facts['env']['HOME'] }}/.local/bin"
-    pi_asset_name: "{{ 'pi-linux-x64.tar.gz' if linux else 'pi-darwin-arm64.tar.gz' }}"
     herdr_asset_name: "{{ 'herdr-linux-x86_64' if linux else 'herdr-macos-aarch64' }}"
   block:
     - name: Ensure ~/.local/bin exists
@@ -134,32 +133,28 @@
 
     - name: Select GitHub releases for this machine
       set_fact:
-        pi_release: >-
-          {{ github_latest.results
-             | selectattr('item', 'equalto', 'earendil-works/pi')
-             | map(attribute='json')
-             | first }}
         herdr_release: >-
           {{ github_latest.results
              | selectattr('item', 'equalto', 'herdrdev/herdr')
              | map(attribute='json')
              | first }}
+        pi_version: >-
+          {{ (github_latest.results
+              | selectattr('item', 'equalto', 'earendil-works/pi')
+              | map(attribute='json')
+              | first).tag_name
+             | regex_replace('^v', '') }}
 
-    - name: Select release assets for this machine
+    - name: Select the Herdr release asset for this machine
       set_fact:
-        pi_asset: >-
-          {{ pi_release.assets
-             | selectattr('name', 'equalto', pi_asset_name)
-             | first }}
         herdr_asset: >-
           {{ herdr_release.assets
              | selectattr('name', 'equalto', herdr_asset_name)
              | first }}
 
-    - name: Require release checksums
+    - name: Require a Herdr release checksum
       assert:
         that:
-          - pi_asset.digest is match('^sha256:[0-9a-f]{64}$')
           - herdr_asset.digest is match('^sha256:[0-9a-f]{64}$')
         fail_msg: GitHub release asset is missing a sha256 digest
 
@@ -170,31 +165,31 @@
         mode: "0755"
         checksum: "{{ herdr_asset.digest }}"
 
-    - name: Download Pi archive
-      get_url:
-        url: "{{ pi_asset.browser_download_url }}"
-        dest: "/tmp/{{ pi_asset_name }}"
-        mode: "0644"
-        checksum: "{{ pi_asset.digest }}"
+    # The GitHub archive is a standalone binary. pi-sandbox forks that
+    # process to run its broker, so bash never starts. The npm launcher is a
+    # Node script, and fork() then uses Node.
+    - name: See how Pi is installed
+      stat:
+        path: "{{ user_bin }}/pi"
+      register: pi_bin
 
-    - name: Ensure Pi install directory exists
-      file:
-        path: "{{ ansible_facts['env']['HOME'] }}/.local/lib"
-        state: directory
-        mode: "0755"
+    - name: Read the installed Pi version
+      command: "{{ user_bin }}/pi --version"
+      register: pi_installed
+      changed_when: false
+      failed_when: false
 
-    - name: Unpack Pi archive next to its theme files
-      unarchive:
-        src: "/tmp/{{ pi_asset_name }}"
-        dest: "{{ ansible_facts['env']['HOME'] }}/.local/lib"
-        remote_src: true
-
-    - name: Link Pi binary
-      file:
-        src: "{{ ansible_facts['env']['HOME'] }}/.local/lib/pi/pi"
-        dest: "{{ user_bin }}/pi"
-        state: link
-        force: true
+    - name: Install Pi with npm
+      command: >-
+        npm install --global --prefix {{ ansible_facts['env']['HOME'] }}/.local
+        @earendil-works/pi-coding-agent@{{ pi_version }}
+      environment:
+        NPM_CONFIG_FUND: "false"
+        NPM_CONFIG_UPDATE_NOTIFIER: "false"
+      when: >-
+        not pi_bin.stat.exists
+        or pi_bin.stat.islnk
+        or (pi_installed.stdout | default('') | trim) != pi_version
 
 # - name: Install Snap packages
 #   snap:
