@@ -9,14 +9,14 @@ config.window_decorations = 'INTEGRATED_BUTTONS | RESIZE'
 config.integrated_title_button_style = 'Gnome'
 config.default_cursor_style = 'BlinkingBar'
 config.font = wezterm.font('JetBrains Mono', { weight = 'Bold' })
-config.font_size = 12.5
+config.font_size = 6.0
 config.window_background_opacity = 0.88
 config.text_background_opacity = 0.65
 
--- Slightly larger fancy tabs; colors match the navy theme below.
+-- Tab titles sit just above the terminal text; colors match the navy theme below.
 config.window_frame = {
   font = wezterm.font('JetBrains Mono', { weight = 'Bold' }),
-  font_size = 14.0,
+  font_size = 7.0,
   active_titlebar_bg = '#0b1520',
   inactive_titlebar_bg = '#0b1520',
 }
