@@ -23,15 +23,21 @@ source "$(dirname "$0")/00_functions.zsh"
 export HISTFILE=~/.zsh_history # Where it gets saved
 export HISTSIZE=1000000
 export SAVEHIST=1000000
-setopt append_history # Don't overwrite, append!
-setopt INC_APPEND_HISTORY # Write after each command
+# share_history already appends each command and reads other shells.
+# A second append option is a second writer.
+unsetopt append_history
+unsetopt inc_append_history
+setopt share_history
+# zsh 5.9 drops its fcntl lock when savehistfile() closes the history fd,
+# and this option disables the symlink lock. Concurrent writes then leave
+# a run of NUL bytes. readhistline() stops there ("corrupt history file").
+unsetopt hist_fcntl_lock
+setopt hist_save_by_copy # rewrite a temp file, then rename over HISTFILE
 setopt hist_expire_dups_first # Expire duplicate entries first when trimming history.
-setopt hist_fcntl_lock # use OS file locking
 setopt hist_ignore_all_dups # Delete old recorded entry if new entry is a duplicate.
 setopt hist_lex_words # better word splitting, but more CPU heavy
 setopt hist_reduce_blanks # Remove superfluous blanks before recording entry.
 setopt hist_save_no_dups # Don't write duplicate entries in the history file.
-setopt share_history # share history between multiple shells
 setopt HIST_IGNORE_SPACE # Don't record an entry starting with a space.
 export ZSH_COMPDUMP=$ZSH/.cache/zcompdump-$HOST
 
