@@ -51,9 +51,6 @@ test -f "{{ .chezmoi.config.destDir }}/.DevOpsTools/skills-repos.conf" && \
 test -f "{{ .chezmoi.config.destDir }}/.ssh/vault/work-signed-cert.pub" && \
     ln -sf "{{ .chezmoi.config.destDir }}/.ssh/vault/work-signed-cert.pub" "{{ .chezmoi.config.workingTree }}/private_dot_ssh/private_vault/encrypted_private_work-signed-cert_decrypted.pub"
 
-test -f "{{ .chezmoi.config.destDir }}/.config/gcx/config.yaml" && \
-    ln -sf "{{ .chezmoi.config.destDir }}/.config/gcx/config.yaml" "{{ .chezmoi.config.workingTree }}/dot_config/gcx/encrypted_private_config_decrypted.yaml"
-
 test -f "{{ .chezmoi.config.destDir }}/.mikromcp/routers.yaml" && \
     ln -sf "{{ .chezmoi.config.destDir }}/.mikromcp/routers.yaml" "{{ .chezmoi.config.workingTree }}/dot_mikromcp/encrypted_routers_decrypted.yaml"
 

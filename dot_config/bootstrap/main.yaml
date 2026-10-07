@@ -33,6 +33,14 @@
       tags: always
       when: ansible_os_family == "Debian" and ansible_architecture == "x86_64"
 
+    # Ubuntu's default sudo is sudo-rs. Ansible 2.20 does not recognize its
+    # password prompt, so become times out. sudo.ws is the classic sudo binary.
+    - name: Use classic sudo for Ansible become
+      ansible.builtin.set_fact:
+        ansible_become_exe: /usr/bin/sudo.ws
+      tags: always
+      when: linux
+
   tasks:
     - name: Include Install Tasks
       include_tasks: install.yaml
