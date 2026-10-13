@@ -28,7 +28,7 @@ repos:
         name: shellcheck bash scripts
         entry: shellcheck
         language: system
-        files: (^dot_scripts/.*\.sh$|^run_.*\.sh\.tmpl$|^dot_config/bootstrap/executable_.*\.sh$)
+        files: (^dot_scripts/.*\.sh$|^run_.*\.sh\.tmpl$|^dot_config/bootstrap/executable_.*\.sh$|^hooks/.*\.sh$)
         exclude: ^run_once_install_zinit\.sh$
 
       - id: yamllint
@@ -59,6 +59,13 @@ repos:
             echo "$tracked";
             exit 1;
           fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: no-new-private-plaintext
+        name: block newly added private plaintext
+        entry: hooks/no-new-private-plaintext.sh
         language: system
         pass_filenames: false
         always_run: true

@@ -12,8 +12,10 @@ machine bootstrap configuration. Treat it as sensitive by default.
 - Install Pi only through the managed installer in the bootstrap. Do not commit
   Pi settings, models, extension source, or sandbox config. Those live in
   pi-setup.
-- Clone pi-setup from the encrypted URL and link `scripts/pi` ahead of the
-  managed launcher.
+- Clone pi-setup with `git-mgmt clone` from the encrypted URL and link
+  `scripts/pi` ahead of the managed launcher.
+- Keep this source checkout at `~/git/private/github.com/NGallmann/dotfiles`.
+  `github.com/NGallmann` is private. Do not clone it into `~/.local/share/chezmoi`.
 - Keep encrypted private configuration in the repository while keeping
   decrypted files outside Git.
 
@@ -33,10 +35,11 @@ machine bootstrap configuration. Treat it as sensitive by default.
 
 ## Sensitive Data Rules
 
-Never expose secrets, personal data, employer names, internal hostnames, tokens,
-passwords, API keys, certificates, private keys, private email addresses, or
-work-specific identifiers in plaintext repository files, commit messages, logs,
-or final answers.
+This tree is published on public GitHub. Keep private material in age files.
+Before commit or push, reject new plaintext that identifies private
+infrastructure, people, or accounts. Leave plaintext that is already tracked
+as it is unless the user asks to change it, and do not copy it into other
+files, commit messages, or docs.
 
 Before finishing changes, inspect the tracked diff with:
 
@@ -112,8 +115,9 @@ This repository uses pre-commit for basic hygiene and safety checks:
   conflicts, private-key detection, large files, and executable shebangs.
 - Local hooks run `shellcheck` for bash scripts/templates and `yamllint` for
   YAML files.
-- Local safety hooks verify that `*.age` files are age-armored and that
-  `_decrypted` helper files are not tracked.
+- Local safety hooks verify that `*.age` files are age-armored, that
+  `_decrypted` helper files are not tracked, and that newly added lines do not
+  contain LAN addresses.
 - Some hooks auto-fix files. After running pre-commit, review the diff and do
   not keep unrelated formatting churn unless it is intentional.
 

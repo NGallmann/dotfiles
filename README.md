@@ -21,10 +21,22 @@ Install the minimum tooling first:
 - Linux: install `chezmoi` and `rbw`
 - macOS: install Homebrew, then `brew install chezmoi rbw`
 
-Then initialize:
+The dotfiles checkout lives at `~/git/private/github.com/NGallmann/dotfiles`.
+That GitHub owner is a private checkout. Do not run `chezmoi init` without
+`--source`. Without it, chezmoi clones into `~/.local/share/chezmoi`.
+
+`git-mgmt` is installed by the first apply. Use it when it is already on
+`PATH`. Otherwise chezmoi clones into the same directory. Put the age identity
+in place first so `--apply` can decrypt private files.
 
 ```bash
-chezmoi init --apply NGallmann/dotfiles
+url=https://github.com/NGallmann/dotfiles.git
+if command -v git-mgmt >/dev/null 2>&1; then
+  dest="$(git-mgmt clone "$url")"
+else
+  dest="$HOME/git/private/github.com/NGallmann/dotfiles"
+fi
+chezmoi init --source="$dest" --apply NGallmann/dotfiles
 ```
 
 ## Encryption
@@ -97,10 +109,11 @@ is missing or invalid. A healthy install is left alone, because `pi update`
 owns upgrades and pins dependencies with `npm ci --ignore-scripts`. A global
 `npm install` is not used: it does not pin transitive dependencies.
 
-An encrypted URL tells apply where to clone pi-setup. `~/.local/bin/pi` points
-at that checkout's `scripts/pi`, and the shell keeps it ahead of
-`~/.pi/agent/bin`. The wrapper executes the managed launcher, so `pi update`
-and `pi update --extensions` still reach Pi.
+An encrypted URL tells apply where to clone pi-setup. The bootstrap clones it
+with `git-mgmt clone`, so the checkout uses the git-mgmt tree.
+`~/.local/bin/pi` points at that checkout's `scripts/pi`, and the shell keeps
+it ahead of `~/.pi/agent/bin`. The wrapper executes the managed launcher, so
+`pi update` and `pi update --extensions` still reach Pi.
 
 ## Useful Commands
 

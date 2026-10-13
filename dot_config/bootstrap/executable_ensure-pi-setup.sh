@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
 # Clone the pi-setup repo named by the encrypted URL file and link its wrapper
 # in front of the managed Pi launcher. Do not pull; `pi` fast-forwards on start.
+# Destination comes from git-mgmt, which is installed before this run script.
 set -euo pipefail
 
 url_file="$HOME/.config/bootstrap/pi-setup.url"
 link="$HOME/.local/bin/pi"
+git_mgmt="$HOME/.scripts/git-mgmt.sh"
 
 command -v git >/dev/null 2>&1 || {
   echo "git is required to bootstrap pi-setup" >&2
   exit 1
 }
+
+if [[ ! -x "$git_mgmt" ]]; then
+  echo "git-mgmt is required to bootstrap pi-setup: $git_mgmt" >&2
+  exit 1
+fi
 
 if [[ ! -f "$url_file" ]]; then
   echo "pi-setup URL file is missing: $url_file" >&2
@@ -25,32 +32,6 @@ case "$url" in
     ;;
 esac
 
-authority=${url#https://}
-authority=${authority%%/*}
-case "$authority" in
-  "" | *@* | *:*)
-    echo "pi-setup URL must be https://host/group/repo with no credentials" >&2
-    exit 1
-    ;;
-esac
-
-repo_path=${url#https://*/}
-repo_path=${repo_path%.git}
-repo_path=${repo_path%/}
-case "$repo_path" in
-  "" | /* | *..* | *//* | */ | */*/*/*)
-    echo "pi-setup URL path must be group/repo or group/subgroup/repo" >&2
-    exit 1
-    ;;
-  */*) ;;
-  *)
-    echo "pi-setup URL path must be group/repo or group/subgroup/repo" >&2
-    exit 1
-    ;;
-esac
-
-# This checkout is the private profile repo, so it lives under ~/git/private.
-dest="$HOME/git/private/$authority/$repo_path"
 normalize() {
   local value="$1"
   value=${value%.git}
@@ -58,6 +39,7 @@ normalize() {
   printf '%s' "$value"
 }
 
+dest="$("$git_mgmt" path "$url")"
 if [[ -d "$dest/.git" ]]; then
   origin=$(git -C "$dest" remote get-url origin)
   if [[ "$(normalize "$origin")" != "$(normalize "$url")" ]]; then
@@ -67,11 +49,10 @@ if [[ -d "$dest/.git" ]]; then
 elif [[ -e "$dest" ]]; then
   echo "pi-setup path exists and is not a git checkout: $dest" >&2
   exit 1
-else
-  mkdir -p "${dest%/*}"
-  GIT_TERMINAL_PROMPT=0 git clone -- "$url" "$dest"
-  echo "cloned pi-setup to $dest"
 fi
+
+dest="$(GIT_TERMINAL_PROMPT=0 "$git_mgmt" clone "$url")"
+echo "pi-setup checkout: $dest"
 
 wrapper="$dest/scripts/pi"
 if [[ ! -x "$wrapper" ]]; then

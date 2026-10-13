@@ -3,6 +3,7 @@ AGENTS.md
 CLAUDE.md
 GEMINI.md
 .agents/**
+hooks/**
 
 **/age_privat_key.txt
 **/age_identity_key.txt
