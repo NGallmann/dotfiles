@@ -4,3 +4,13 @@ zmodload zsh/zprof
 for file in $HOME/.zshrc.d/*.zsh; do
     source "$file"
 done
+
+# ~/.local/bin/pi is the pi-setup wrapper. It must stay ahead of the managed
+# launcher. The wrapper execs ~/.pi/agent/bin/pi, which sets
+# PI_MANAGED_INSTALL_ROOT so `pi update` keeps the pinned install.
+typeset -U path
+path=(
+  "$HOME/.local/bin"
+  "$HOME/.pi/agent/bin"
+  $path
+)

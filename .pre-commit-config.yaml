@@ -28,7 +28,7 @@ repos:
         name: shellcheck bash scripts
         entry: shellcheck
         language: system
-        files: (^dot_scripts/.*\.sh$|^run_.*\.sh\.tmpl$)
+        files: (^dot_scripts/.*\.sh$|^run_.*\.sh\.tmpl$|^dot_config/bootstrap/executable_.*\.sh$)
         exclude: ^run_once_install_zinit\.sh$
 
       - id: yamllint

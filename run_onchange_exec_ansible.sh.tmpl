@@ -2,6 +2,7 @@
 # 'onchange' is actually only for this file but adding these hashes helps to include other files
 # main.yaml hash: {{ include "dot_config/bootstrap/main.yaml" | sha256sum }}
 # install.yaml hash: {{ include "dot_config/bootstrap/install.yaml" | sha256sum }}
+# install-pi.sh hash: {{ include "dot_config/bootstrap/executable_install-pi.sh" | sha256sum }}
 # requirements.yaml hash: {{ include "dot_config/bootstrap/requirements.yaml" | sha256sum }}
 set -e
 # debug with : chezmoi state delete-bucket --bucket=scriptState

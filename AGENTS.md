@@ -9,6 +9,11 @@ machine bootstrap configuration. Treat it as sensitive by default.
   configuration through chezmoi.
 - Bootstrap supported machines with Ansible after chezmoi applies the source
   tree.
+- Install Pi only through the managed installer in the bootstrap. Do not commit
+  Pi settings, models, extension source, or sandbox config. Those live in
+  pi-setup.
+- Clone pi-setup from the encrypted URL and link `scripts/pi` ahead of the
+  managed launcher.
 - Keep encrypted private configuration in the repository while keeping
   decrypted files outside Git.
 

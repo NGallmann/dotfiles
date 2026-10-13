@@ -87,6 +87,21 @@ permissions. On macOS it expects Homebrew to already exist.
 The playbook in `dot_config/bootstrap/` installs common CLI tools, shell
 utilities, editor tooling, and platform-specific packages.
 
+## Pi
+
+Chezmoi does not store Pi settings, models, or extensions. Those belong to the
+pi-setup checkout.
+
+The bootstrap installs Pi with the official managed installer when that install
+is missing or invalid. A healthy install is left alone, because `pi update`
+owns upgrades and pins dependencies with `npm ci --ignore-scripts`. A global
+`npm install` is not used: it does not pin transitive dependencies.
+
+An encrypted URL tells apply where to clone pi-setup. `~/.local/bin/pi` points
+at that checkout's `scripts/pi`, and the shell keeps it ahead of
+`~/.pi/agent/bin`. The wrapper executes the managed launcher, so `pi update`
+and `pi update --extensions` still reach Pi.
+
 ## Useful Commands
 
 Inspect pending changes:
