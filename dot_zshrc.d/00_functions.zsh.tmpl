@@ -93,9 +93,10 @@ function git_setup() {
         echo "Unknown Repo! :(" ; return 1
     fi
     top_level="$(git rev-parse --show-toplevel)"
-    command -v pre-commit >/dev/null 2>&1 && \
-            test -f "$top_level/.pre-commit-config.yaml" && \
-                pre-commit install
+    if command -v pre-commit >/dev/null 2>&1 && \
+            test -f "$top_level/.pre-commit-config.yaml"; then
+        pre-commit install
+    fi
 }
 
 # This function just helps finding the right command, or executing it
