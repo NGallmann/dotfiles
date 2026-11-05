@@ -1,0 +1,38 @@
+# Ghostty cannot stack a photo, an HSB adjustment, and a color veil, so bg.jpg
+# is the wallpaper already darkened (brightness 0.45, saturation 1.02) with
+# Solarized base03 #002b36 at 60% on top.
+# One opacity covers the window and the cells. 0.93 is the chosen glass.
+
+{{- $host := lower .chezmoi.hostname -}}
+{{- $font := 12.0 -}}
+{{- if eq $host "carbonpad" -}}
+{{- $font = 10.0 -}}
+{{- end }}
+
+font-family = JetBrains Mono
+font-style = Bold
+font-style-bold = Bold
+font-style-italic = Bold Italic
+font-style-bold-italic = Bold Italic
+# The regular face is already Bold. Do not synthesize a second bold on top.
+font-synthetic-style = no-bold,no-bold-italic
+# {{ $host }}: terminal font size. carbonpad is smaller; other hosts use 12.
+font-size = {{ printf "%.1f" $font }}
+
+theme = "TokyoNight Storm"
+background = #0b1520
+foreground = #c8d6ea
+cursor-color = #7dcfff
+cursor-text = #0b1520
+selection-background = #1f4a6e
+selection-foreground = #e8f1ff
+
+cursor-style = bar
+cursor-style-blink = true
+
+background-image = {{ .chezmoi.homeDir }}/.config/ghostty/bg.jpg
+background-image-fit = cover
+background-image-position = center
+background-opacity = 0.93
+background-opacity-cells = true
+window-theme = ghostty
