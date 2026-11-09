@@ -30,6 +30,12 @@ selection-foreground = #e8f1ff
 cursor-style = bar
 cursor-style-blink = true
 
+# Hexagonal smear from the Ghostty cursor-trail demo. The bar cursor
+# changes shape when the window loses focus, which freezes the shader
+# unless the animation loop keeps running.
+custom-shader = {{ .chezmoi.homeDir }}/.config/ghostty/shaders/cursor_smear_navy.glsl
+custom-shader-animation = always
+
 background-image = {{ .chezmoi.homeDir }}/.config/ghostty/bg.jpg
 background-image-fit = cover
 background-image-position = center
