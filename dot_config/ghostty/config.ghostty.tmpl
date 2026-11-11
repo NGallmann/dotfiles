@@ -6,7 +6,9 @@
 {{- $host := lower .chezmoi.hostname -}}
 {{- $font := 12.0 -}}
 {{- if eq $host "carbonpad" -}}
-{{- $font = 10.0 -}}
+{{- $font = 14.0 -}}
+{{- else if eq $host "maulwurf" -}}
+{{- $font = 12.0 -}}
 {{- end }}
 
 font-family = JetBrains Mono
@@ -16,7 +18,7 @@ font-style-italic = Bold Italic
 font-style-bold-italic = Bold Italic
 # The regular face is already Bold. Do not synthesize a second bold on top.
 font-synthetic-style = no-bold,no-bold-italic
-# {{ $host }}: terminal font size. carbonpad is smaller; other hosts use 12.
+# {{ $host }}: terminal font size. carbonpad uses 14; maulwurf keeps 12.
 font-size = {{ printf "%.1f" $font }}
 
 theme = "TokyoNight Storm"
