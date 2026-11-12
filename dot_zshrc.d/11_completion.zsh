@@ -16,6 +16,7 @@ find "$HOME/.local/share/zinit/completions" -type l ! -exec test -e {} \; -delet
 (update_bin_completion helmfile completion zsh > /dev/null 2>&1 &)
 (update_bin_completion helm_ls completion zsh > /dev/null 2>&1 &)
 (update_bin_completion rbw gen-completions zsh > /dev/null 2>&1 &)
+(update_bin_completion openshell completions zsh > /dev/null 2>&1 &)
 
 # adding az completion
 command -v az >/dev/null 2>&1 && \
